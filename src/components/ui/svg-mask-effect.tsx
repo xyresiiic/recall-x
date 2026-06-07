@@ -17,7 +17,10 @@ export const MaskContainer = ({
   className?: string;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [mousePosition, setMousePosition] = useState<{ x: number | null; y: number | null }>({ x: null, y: null });
+  const [mousePosition, setMousePosition] = useState<{ x: number | null; y: number | null }>({
+    x: null,
+    y: null,
+  });
   const containerRef = useRef<HTMLDivElement>(null);
 
   const updateMousePosition = (e: MouseEvent) => {
@@ -39,7 +42,9 @@ export const MaskContainer = ({
     <motion.div
       ref={containerRef}
       className={cn("relative h-screen w-full overflow-hidden", className)}
-      animate={{ backgroundColor: isHovered ? "var(--color-background)" : "var(--color-background)" }}
+      animate={{
+        backgroundColor: isHovered ? "var(--color-background)" : "var(--color-background)",
+      }}
     >
       <motion.div
         className="absolute flex h-full w-full items-center justify-center bg-white text-6xl [mask-repeat:no-repeat]"

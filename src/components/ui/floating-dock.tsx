@@ -22,13 +22,23 @@ export function FloatingDock({ items, className }: { items: DockItem[]; classNam
   );
 }
 
-function Icon({ title, icon, href, onClick, mouseX }: DockItem & { mouseX: ReturnType<typeof useMotionValue<number>> }) {
+function Icon({
+  title,
+  icon,
+  href,
+  onClick,
+  mouseX,
+}: DockItem & { mouseX: ReturnType<typeof useMotionValue<number>> }) {
   const ref = useRef<HTMLDivElement>(null);
   const dist = useTransform(mouseX, (v) => {
     const b = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
     return v - b.x - b.width / 2;
   });
-  const size = useSpring(useTransform(dist, [-150, 0, 150], [40, 72, 40]), { mass: 0.1, stiffness: 150, damping: 12 });
+  const size = useSpring(useTransform(dist, [-150, 0, 150], [40, 72, 40]), {
+    mass: 0.1,
+    stiffness: 150,
+    damping: 12,
+  });
   const [hover, setHover] = useState(false);
 
   return (

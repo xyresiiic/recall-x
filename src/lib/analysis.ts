@@ -37,7 +37,13 @@ function aggregate(rows: Row[]) {
       map.set(k, entry);
     }
     return Array.from(map.entries())
-      .map(([name, v]) => ({ name, count: v.count, avg: Math.round(v.total / v.count), total: v.total, max: v.max }))
+      .map(([name, v]) => ({
+        name,
+        count: v.count,
+        avg: Math.round(v.total / v.count),
+        total: v.total,
+        max: v.max,
+      }))
       .sort((a, b) => b.avg - a.avg);
   };
   return {
@@ -60,22 +66,22 @@ function buildMemorySummary(rows: Row[]) {
 }
 
 async function getGateway() {
-  const key = process.env.AI_GATEWAY_API_KEY;
-  if (!key)
+  const key = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+  if (!key || key === "your-gemini-api-key-here")
     throw new Error(
-      "AI_GATEWAY_API_KEY is not configured. Create a .env file or set AI_GATEWAY_API_KEY in your environment. See .env.example for required vars.",
+      "GOOGLE_GENERATIVE_AI_API_KEY is not configured. Create a .env file or set GOOGLE_GENERATIVE_AI_API_KEY in your environment.",
     );
   const { createAiGatewayProvider } = await import("./ai-gateway.server");
   return createAiGatewayProvider(key);
 }
 
 // Use the more reliable structured-output model for these calls.
-// gemini-3-flash-preview is great for streaming chat but flaky with Output.object.
-const STRUCTURED_MODEL = "google/gemini-2.5-flash";
+const STRUCTURED_MODEL = "gemini-2.5-flash";
 
 async function buildHindsightBlock(query: string) {
   try {
-    const { recallMemories, formatRecallForPrompt, hindsightConfigured } = await import("./hindsight.server");
+    const { recallMemories, formatRecallForPrompt, hindsightConfigured } =
+      await import("./hindsight.server");
     if (!hindsightConfigured()) return { block: "", count: 0 };
     const hits = await recallMemories(query, 1000);
     return {
@@ -90,7 +96,10 @@ async function buildHindsightBlock(query: string) {
 
 /** Strip markdown fences and extract the first balanced JSON object/array from a string. */
 function extractJson(raw: string): unknown {
-  let s = raw.replace(/```json\s*/gi, "").replace(/```\s*/g, "").trim();
+  let s = raw
+    .replace(/```json\s*/gi, "")
+    .replace(/```\s*/g, "")
+    .trim();
   const start = s.search(/[{[]/);
   if (start === -1) throw new Error("No JSON found in model output");
   const open = s[start];
@@ -101,7 +110,11 @@ function extractJson(raw: string): unknown {
   try {
     return JSON.parse(s);
   } catch {
-    s = s.replace(/,\s*}/g, "}").replace(/,\s*]/g, "]").replace(/[\x00-\x1F\x7F]/g, "");
+    s = s
+      .replace(/,\s*}/g, "}")
+      .replace(/,\s*]/g, "]")
+      // eslint-disable-next-line no-control-regex
+      .replace(/[\x00-\x1F\x7F]/g, "");
     return JSON.parse(s);
   }
 }
@@ -125,7 +138,10 @@ async function generateStructured<T>(
     });
     return { ok: true, data: experimental_output as T };
   } catch (e) {
-    console.warn("[analysis] structured output failed, falling back to JSON-prompt:", (e as Error).message);
+    console.warn(
+      "[analysis] structured output failed, falling back to JSON-prompt:",
+      (e as Error).message,
+    );
   }
   // Attempt 2: plain prompt, parse JSON manually
   try {
@@ -183,7 +199,9 @@ export const analyzePerformance = createServerFn({ method: "POST" }).handler(asy
   const rows = await loadMemory();
   if (rows.length === 0) return { empty: true as const };
   const summary = buildMemorySummary(rows);
-  const recall = await buildHindsightBlock("Which past posts performed best and what patterns explain why?");
+  const recall = await buildHindsightBlock(
+    "Which past posts performed best and what patterns explain why?",
+  );
   const result = await generateStructured(
     PerformanceSchema,
     `You are a marketing analyst using HINDSIGHT MEMORY. Analyze this aggregated content memory and return concise, number-citing insights. Reference engagement_score and topic/platform/format names from the data. Give 3-5 patterns.\n\nMEMORY (aggregates from Postgres):\n${summary}${recall.block}`,
@@ -195,15 +213,28 @@ export const analyzePerformance = createServerFn({ method: "POST" }).handler(asy
   "patterns": ["string", "string", "string"]
 }`,
   );
-  if (!result.ok) return { empty: false as const, memoryCount: rows.length, hindsightRecall: recall.count, error: result.error };
-  return { empty: false as const, memoryCount: rows.length, hindsightRecall: recall.count, analysis: result.data };
+  if (!result.ok)
+    return {
+      empty: false as const,
+      memoryCount: rows.length,
+      hindsightRecall: recall.count,
+      error: result.error,
+    };
+  return {
+    empty: false as const,
+    memoryCount: rows.length,
+    hindsightRecall: recall.count,
+    analysis: result.data,
+  };
 });
 
 export const recommendContent = createServerFn({ method: "POST" }).handler(async () => {
   const rows = await loadMemory();
   if (rows.length === 0) return { empty: true as const };
   const summary = buildMemorySummary(rows);
-  const recall = await buildHindsightBlock("What kinds of content historically performed best for this team?");
+  const recall = await buildHindsightBlock(
+    "What kinds of content historically performed best for this team?",
+  );
   const result = await generateStructured(
     RecommendSchema,
     `Based on HINDSIGHT MEMORY, recommend the next 3-5 pieces of content. Each must justify itself using actual numbers from the data. Prefer combinations of topic+platform+format that historically outperformed.\n\nMEMORY:\n${summary}${recall.block}`,
@@ -214,15 +245,28 @@ export const recommendContent = createServerFn({ method: "POST" }).handler(async
   ]
 }`,
   );
-  if (!result.ok) return { empty: false as const, memoryCount: rows.length, hindsightRecall: recall.count, error: result.error };
-  return { empty: false as const, memoryCount: rows.length, hindsightRecall: recall.count, recommendations: result.data };
+  if (!result.ok)
+    return {
+      empty: false as const,
+      memoryCount: rows.length,
+      hindsightRecall: recall.count,
+      error: result.error,
+    };
+  return {
+    empty: false as const,
+    memoryCount: rows.length,
+    hindsightRecall: recall.count,
+    recommendations: result.data,
+  };
 });
 
 export const findContentGaps = createServerFn({ method: "POST" }).handler(async () => {
   const rows = await loadMemory();
   if (rows.length === 0) return { empty: true as const };
   const summary = buildMemorySummary(rows);
-  const recall = await buildHindsightBlock("What topics or formats are underrepresented or missing from past content?");
+  const recall = await buildHindsightBlock(
+    "What topics or formats are underrepresented or missing from past content?",
+  );
   const result = await generateStructured(
     GapsSchema,
     `Inspect HINDSIGHT MEMORY and identify 3-6 gaps: missing topics, underrepresented platforms, untapped formats, audience interests hinted at by high-engagement posts but not yet expanded on. Cite evidence from the data.\n\nMEMORY:\n${summary}${recall.block}`,
@@ -233,14 +277,29 @@ export const findContentGaps = createServerFn({ method: "POST" }).handler(async 
   ]
 }`,
   );
-  if (!result.ok) return { empty: false as const, memoryCount: rows.length, hindsightRecall: recall.count, error: result.error };
-  return { empty: false as const, memoryCount: rows.length, hindsightRecall: recall.count, gaps: result.data };
+  if (!result.ok)
+    return {
+      empty: false as const,
+      memoryCount: rows.length,
+      hindsightRecall: recall.count,
+      error: result.error,
+    };
+  return {
+    empty: false as const,
+    memoryCount: rows.length,
+    hindsightRecall: recall.count,
+    gaps: result.data,
+  };
 });
 
 export const getMemorySummary = createServerFn({ method: "GET" }).handler(async () => {
   const rows = await loadMemory();
   const { hindsightConfigured } = await import("./hindsight.server");
-  return { count: rows.length, aggregates: aggregate(rows), hindsightConfigured: hindsightConfigured() };
+  return {
+    count: rows.length,
+    aggregates: aggregate(rows),
+    hindsightConfigured: hindsightConfigured(),
+  };
 });
 
 // ---------- Platform recommender (post text -> best social platform) ----------
@@ -259,7 +318,9 @@ export const recommendPlatform = createServerFn({ method: "POST" })
   .validator(z.object({ postIdea: z.string().min(1) }))
   .handler(async ({ data }) => {
     const rows = await loadMemory();
-    const summary = rows.length ? buildMemorySummary(rows) : "(no memory yet — base recommendation on general best practices)";
+    const summary = rows.length
+      ? buildMemorySummary(rows)
+      : "(no memory yet — base recommendation on general best practices)";
     const recall = await buildHindsightBlock(`Which platform fits this post: ${data.postIdea}`);
     const result = await generateStructured(
       PlatformRecSchema,
@@ -284,5 +345,10 @@ Confidence is 0-1. Return 2 alternates with reasons. Caption should match platfo
 }`,
     );
     if (!result.ok) return { ok: false as const, error: result.error };
-    return { ok: true as const, memoryCount: rows.length, hindsightRecall: recall.count, rec: result.data };
+    return {
+      ok: true as const,
+      memoryCount: rows.length,
+      hindsightRecall: recall.count,
+      rec: result.data,
+    };
   });

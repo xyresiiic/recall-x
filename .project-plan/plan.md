@@ -50,6 +50,7 @@ Yeh ek **Content Strategy AI Agent** hai jo aapki marketing team ke purane socia
 ### Professional tech explanation (banane wale ke nazar se)
 
 **Stack:**
+
 - **TanStack Start** (React + Vite, SSR + server functions)
 - **Supabase** = Postgres + Auth + Storage
 - **AI Gateway** = Gemini models via OpenAI-compatible API
@@ -70,6 +71,7 @@ Ask AI ──► 1. Postgres se aggregates (top topics, avg engagement per platf
 ```
 
 **Files map:**
+
 - `src/integrations/supabase/*` — DB clients (browser, admin, auth middleware)
 - `src/lib/content.ts` — `addContent`, `bulkAddContent`, `seedDemoData`, `clearMemory` (dual-write to Postgres + Hindsight)
 - `src/lib/hindsight.server.ts` — Hindsight client: `ingestMemories`, `recallMemories`, `clearBankMemories`
@@ -79,6 +81,7 @@ Ask AI ──► 1. Postgres se aggregates (top topics, avg engagement per platf
 - `src/routes/chat.tsx` — chat UI with Memory ON/OFF toggle
 
 **Hackathon mandatory ticks:**
+
 - ✅ Hindsight integrated (bank API, Bearer auth, recall+ingest+clear)
 - ✅ Memory makes agent smarter (chat saves back into Hindsight)
 - ✅ Demo-safe (Hindsight fail ho to Postgres-only fallback, app crash nahi karta)

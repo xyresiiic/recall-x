@@ -14,9 +14,16 @@ export const Route = createFileRoute("/recommender")({
   head: () => ({
     meta: [
       { title: "Platform Recommender — RecallX" },
-      { name: "description", content: "Drop a post idea. RecallX tells you the best platform, caption, hashtags, and the perfect time to publish." },
+      {
+        name: "description",
+        content:
+          "Drop a post idea. RecallX tells you the best platform, caption, hashtags, and the perfect time to publish.",
+      },
       { property: "og:title", content: "Platform Recommender — RecallX" },
-      { property: "og:description", content: "AI-powered platform recommendations from your content memory." },
+      {
+        property: "og:description",
+        content: "AI-powered platform recommendations from your content memory.",
+      },
     ],
   }),
   component: RecommenderPage,
@@ -45,7 +52,10 @@ function RecommenderPage() {
       <div className="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full bg-cyan-500/20 blur-[140px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-6xl">
-        <Link to="/" className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition mb-10">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition mb-10"
+        >
           <ArrowLeft className="h-4 w-4" /> Back to home
         </Link>
 
@@ -58,14 +68,17 @@ function RecommenderPage() {
             Where should this post <AuroraText>actually live?</AuroraText>
           </h1>
           <p className="mt-6 max-w-2xl mx-auto text-lg text-white/80 leading-relaxed">
-            Drop a post idea. The agent reads your memory and brand voice, then tells you the best platform, the optimized caption, the right hashtags, and the perfect time to publish.
+            Drop a post idea. The agent reads your memory and brand voice, then tells you the best
+            platform, the optimized caption, the right hashtags, and the perfect time to publish.
           </p>
         </div>
 
         <div className="mt-16 grid lg:grid-cols-2 gap-6">
           {/* Input */}
           <div className="rounded-2xl border border-white/15 bg-white/[0.04] backdrop-blur p-7">
-            <label className="text-[11px] uppercase tracking-[0.25em] text-white/70 font-mono">Your post idea</label>
+            <label className="text-[11px] uppercase tracking-[0.25em] text-white/70 font-mono">
+              Your post idea
+            </label>
             <Textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -73,7 +86,9 @@ function RecommenderPage() {
               className="mt-3 min-h-[200px] resize-none bg-black/40 border-white/15 text-white text-base placeholder:text-white/40 focus-visible:ring-violet-500"
             />
             <div className="mt-4">
-              <div className="text-[11px] uppercase tracking-[0.25em] text-white/60 font-mono mb-2">Try an example</div>
+              <div className="text-[11px] uppercase tracking-[0.25em] text-white/60 font-mono mb-2">
+                Try an example
+              </div>
               <div className="flex flex-wrap gap-2">
                 {examples.map((ex, i) => (
                   <button
@@ -91,7 +106,11 @@ function RecommenderPage() {
               disabled={!text.trim() || m.isPending}
               className="mt-6 w-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-400 text-black font-semibold hover:opacity-90 h-12 text-base"
             >
-              {m.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Zap className="h-4 w-4 mr-2" />}
+              {m.isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              ) : (
+                <Zap className="h-4 w-4 mr-2" />
+              )}
               Recommend platform
             </Button>
           </div>
@@ -117,27 +136,42 @@ function RecommenderPage() {
               <div className="relative z-10 space-y-5">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <div className="text-[10px] uppercase tracking-[0.25em] text-white/60 font-mono">Best platform</div>
-                    <div className="mt-1 font-display text-5xl gradient-text">{r.rec.best_platform}</div>
+                    <div className="text-[10px] uppercase tracking-[0.25em] text-white/60 font-mono">
+                      Best platform
+                    </div>
+                    <div className="mt-1 font-display text-5xl gradient-text">
+                      {r.rec.best_platform}
+                    </div>
                     <div className="mt-1 text-xs text-white/60 font-mono">
-                      confidence {Math.round((r.rec.confidence ?? 0) * 100)}% · {r.memoryCount} memories used
+                      confidence {Math.round((r.rec.confidence ?? 0) * 100)}% · {r.memoryCount}{" "}
+                      memories used
                     </div>
                   </div>
-                  <div className="text-right text-sm text-white/80 max-w-[45%]">{r.rec.best_time}</div>
+                  <div className="text-right text-sm text-white/80 max-w-[45%]">
+                    {r.rec.best_time}
+                  </div>
                 </div>
                 <p className="text-base text-white/90 leading-relaxed">{r.rec.reason}</p>
                 <div className="rounded-xl border border-white/15 bg-black/50 p-4">
-                  <div className="text-[10px] uppercase tracking-[0.25em] text-white/60 mb-2 font-mono">Optimized caption</div>
-                  <p className="text-base text-white whitespace-pre-wrap leading-relaxed">{r.rec.optimized_caption}</p>
+                  <div className="text-[10px] uppercase tracking-[0.25em] text-white/60 mb-2 font-mono">
+                    Optimized caption
+                  </div>
+                  <p className="text-base text-white whitespace-pre-wrap leading-relaxed">
+                    {r.rec.optimized_caption}
+                  </p>
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {r.rec.hashtags?.map((h, i) => (
-                      <span key={i} className="text-xs font-mono text-cyan-200">#{h.replace(/^#/, "")}</span>
+                      <span key={i} className="text-xs font-mono text-cyan-200">
+                        #{h.replace(/^#/, "")}
+                      </span>
                     ))}
                   </div>
                 </div>
                 {r.rec.alternates?.length > 0 && (
                   <div>
-                    <div className="text-[10px] uppercase tracking-[0.25em] text-white/60 mb-2 font-mono">Also consider</div>
+                    <div className="text-[10px] uppercase tracking-[0.25em] text-white/60 mb-2 font-mono">
+                      Also consider
+                    </div>
                     <div className="grid grid-cols-2 gap-2">
                       {r.rec.alternates.map((a, i) => (
                         <div key={i} className="rounded-lg border border-white/15 bg-white/5 p-3">

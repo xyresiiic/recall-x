@@ -34,7 +34,7 @@ export function SparklesCore({
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
       ctx.scale(dpr, dpr);
-      const count = Math.floor((rect.width * rect.height) / 8000 * (particleDensity / 100));
+      const count = Math.floor(((rect.width * rect.height) / 8000) * (particleDensity / 100));
       particles = Array.from({ length: count }, () => ({
         x: Math.random() * rect.width,
         y: Math.random() * rect.height,

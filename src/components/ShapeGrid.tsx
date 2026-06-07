@@ -36,13 +36,16 @@ export function ShapeGrid({
     if (!ctx) return;
     let raf = 0;
     let offset = 0;
-    let w = 0, h = 0;
+    let w = 0,
+      h = 0;
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
       const dpr = window.devicePixelRatio || 1;
-      w = rect.width; h = rect.height;
-      canvas.width = w * dpr; canvas.height = h * dpr;
+      w = rect.width;
+      h = rect.height;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
@@ -59,7 +62,9 @@ export function ShapeGrid({
         if (trailRef.current.length > hoverTrailAmount) trailRef.current.length = hoverTrailAmount;
       }
     };
-    const onLeave = () => { mouseRef.current = null; };
+    const onLeave = () => {
+      mouseRef.current = null;
+    };
     canvas.addEventListener("mousemove", onMove);
     canvas.addEventListener("mouseleave", onLeave);
 
@@ -73,7 +78,8 @@ export function ShapeGrid({
           const a = (Math.PI / 3) * i + Math.PI / 6;
           const px = cx + r * Math.cos(a);
           const py = cy + r * Math.sin(a);
-          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
         }
         ctx.closePath();
       } else if (shape === "triangle") {
@@ -84,7 +90,10 @@ export function ShapeGrid({
       } else {
         ctx.rect(cx - r, cy - r, r * 2, r * 2);
       }
-      if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+      if (fill) {
+        ctx.fillStyle = fill;
+        ctx.fill();
+      }
       ctx.strokeStyle = borderColor;
       ctx.lineWidth = 1;
       ctx.stroke();
@@ -94,8 +103,22 @@ export function ShapeGrid({
       ctx.clearRect(0, 0, w, h);
       offset += speed;
       const s = squareSize;
-      const dx = direction === "left" ? -offset : direction === "right" ? offset : direction === "diagonal" ? offset : 0;
-      const dy = direction === "up" ? -offset : direction === "down" ? offset : direction === "diagonal" ? offset : 0;
+      const dx =
+        direction === "left"
+          ? -offset
+          : direction === "right"
+            ? offset
+            : direction === "diagonal"
+              ? offset
+              : 0;
+      const dy =
+        direction === "up"
+          ? -offset
+          : direction === "down"
+            ? offset
+            : direction === "diagonal"
+              ? offset
+              : 0;
       const ox = ((dx % s) + s) % s;
       const oy = ((dy % s) + s) % s;
 
@@ -129,7 +152,9 @@ export function ShapeGrid({
         }
       }
       // decay trail
-      trailRef.current = trailRef.current.map((p) => ({ ...p, life: p.life - 0.05 })).filter((p) => p.life > 0);
+      trailRef.current = trailRef.current
+        .map((p) => ({ ...p, life: p.life - 0.05 }))
+        .filter((p) => p.life > 0);
       raf = requestAnimationFrame(loop);
     };
     loop();

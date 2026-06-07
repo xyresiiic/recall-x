@@ -23,7 +23,10 @@ type RecallHit = {
 function getConfig() {
   const apiKey = process.env.HINDSIGHT_API_KEY;
   const bankId = process.env.HINDSIGHT_BANK_ID;
-  const baseUrl = (process.env.HINDSIGHT_BASE_URL || "https://hindsight.vectorize.io").replace(/\/$/, "");
+  const baseUrl = (process.env.HINDSIGHT_BASE_URL || "https://hindsight.vectorize.io").replace(
+    /\/$/,
+    "",
+  );
   if (!apiKey || !bankId) return null;
   return { apiKey, bankId, baseUrl };
 }
@@ -34,7 +37,8 @@ export function hindsightConfigured() {
 
 async function call(path: string, init: RequestInit) {
   const cfg = getConfig();
-  if (!cfg) throw new Error("Hindsight not configured (HINDSIGHT_API_KEY / HINDSIGHT_BANK_ID missing)");
+  if (!cfg)
+    throw new Error("Hindsight not configured (HINDSIGHT_API_KEY / HINDSIGHT_BANK_ID missing)");
   const url = `${cfg.baseUrl}/v1/default/banks/${encodeURIComponent(cfg.bankId)}${path}`;
   const res = await fetch(url, {
     ...init,
@@ -72,7 +76,9 @@ export async function ensureBank() {
 }
 
 /** Store one or many memories (retain). Returns silently on failure (demo safety). */
-export async function ingestMemories(items: MemoryItem[]): Promise<{ ok: boolean; error?: string }> {
+export async function ingestMemories(
+  items: MemoryItem[],
+): Promise<{ ok: boolean; error?: string }> {
   if (!hindsightConfigured()) return { ok: false, error: "not_configured" };
   if (items.length === 0) return { ok: true };
   try {

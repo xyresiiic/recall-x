@@ -10,10 +10,10 @@ export const Route = createFileRoute("/api/chat")({
         const useMemory = body.useMemory !== false;
         if (!Array.isArray(messages)) return new Response("Messages required", { status: 400 });
 
-        const key = process.env.AI_GATEWAY_API_KEY;
-        if (!key)
+        const key = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+        if (!key || key === "your-gemini-api-key-here")
           return new Response(
-            "Missing AI_GATEWAY_API_KEY. Set AI_GATEWAY_API_KEY in environment (see .env.example)",
+            "Missing GOOGLE_GENERATIVE_AI_API_KEY. Set GOOGLE_GENERATIVE_AI_API_KEY in environment.",
             { status: 500 },
           );
 
@@ -25,7 +25,9 @@ export const Route = createFileRoute("/api/chat")({
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
           const { data } = await supabaseAdmin
             .from("content_memory")
-            .select("title,platform,topic,content_type,likes,shares,comments,engagement_score,published_date")
+            .select(
+              "title,platform,topic,content_type,likes,shares,comments,engagement_score,published_date",
+            )
             .order("engagement_score", { ascending: false });
           const rows = data ?? [];
           memoryCount = rows.length;
@@ -38,7 +40,8 @@ export const Route = createFileRoute("/api/chat")({
             .join(" ")
             .trim();
           if (userText) {
-            const { recallMemories, formatRecallForPrompt, hindsightConfigured } = await import("@/lib/hindsight.server");
+            const { recallMemories, formatRecallForPrompt, hindsightConfigured } =
+              await import("@/lib/hindsight.server");
             if (hindsightConfigured()) {
               const hits = await recallMemories(userText, 1500);
               hindsightCount = hits.length;
@@ -55,7 +58,7 @@ export const Route = createFileRoute("/api/chat")({
         const gateway = createAiGatewayProvider(key);
 
         const result = streamText({
-          model: gateway("google/gemini-3-flash-preview"),
+          model: gateway("gemini-3-flash-preview"),
           system,
           messages: await convertToModelMessages(messages),
         });

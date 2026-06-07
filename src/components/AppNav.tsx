@@ -11,7 +11,9 @@ export function AppNav() {
           </div>
           <div className="leading-tight">
             <div className="font-display text-lg">Hindsight</div>
-            <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Content Strategy Agent</div>
+            <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+              Content Strategy Agent
+            </div>
           </div>
         </Link>
         <nav className="flex items-center gap-1 text-sm">
@@ -19,14 +21,20 @@ export function AppNav() {
             to="/"
             activeOptions={{ exact: true }}
             className="flex items-center gap-2 rounded-md px-3 py-2 text-muted-foreground transition hover:text-foreground"
-            activeProps={{ className: "flex items-center gap-2 rounded-md px-3 py-2 bg-secondary text-foreground" }}
+            activeProps={{
+              className:
+                "flex items-center gap-2 rounded-md px-3 py-2 bg-secondary text-foreground",
+            }}
           >
             <LayoutDashboard className="h-4 w-4" /> Dashboard
           </Link>
           <Link
             to="/chat"
             className="flex items-center gap-2 rounded-md px-3 py-2 text-muted-foreground transition hover:text-foreground"
-            activeProps={{ className: "flex items-center gap-2 rounded-md px-3 py-2 bg-secondary text-foreground" }}
+            activeProps={{
+              className:
+                "flex items-center gap-2 rounded-md px-3 py-2 bg-secondary text-foreground",
+            }}
           >
             <MessageSquare className="h-4 w-4" /> Chat
           </Link>

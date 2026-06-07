@@ -19,15 +19,21 @@ export function CustomCursor() {
 
     document.documentElement.classList.add("hide-native-cursor");
 
-    let mx = 0, my = 0, rx = 0, ry = 0;
+    let mx = 0,
+      my = 0,
+      rx = 0,
+      ry = 0;
     const onMove = (e: MouseEvent) => {
-      mx = e.clientX; my = e.clientY;
+      mx = e.clientX;
+      my = e.clientY;
       if (!visible) setVisible(true);
       if (dotRef.current) {
         dotRef.current.style.transform = `translate3d(${mx}px, ${my}px, 0) translate(-50%, -50%)`;
       }
       const t = e.target as HTMLElement | null;
-      const interactive = !!t?.closest("a,button,input,textarea,select,[role=button],[data-cursor=hover]");
+      const interactive = !!t?.closest(
+        "a,button,input,textarea,select,[role=button],[data-cursor=hover]",
+      );
       setHover(interactive);
     };
     const loop = () => {

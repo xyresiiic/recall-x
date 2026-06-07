@@ -1,6 +1,12 @@
 import { cn } from "@/lib/utils";
 
-export function AuroraText({ children, className }: { children: React.ReactNode; className?: string }) {
+export function AuroraText({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <span
       className={cn(

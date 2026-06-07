@@ -23,7 +23,11 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "RecallX — The Memory Engine for Marketers" },
-      { name: "description", content: "An AI agent that remembers every post, learns every pattern, and tells you exactly what to publish next." },
+      {
+        name: "description",
+        content:
+          "An AI agent that remembers every post, learns every pattern, and tells you exactly what to publish next.",
+      },
     ],
   }),
   component: Landing,
@@ -34,10 +38,9 @@ function Landing() {
     <main className="overflow-x-hidden">
       <TopNav />
       <Hero />
-      
+
       <Features />
-      
-      
+
       <HowItWorks />
       <CTA />
       <Footer />
@@ -45,8 +48,6 @@ function Landing() {
     </main>
   );
 }
-
-
 
 /* ===================== TOP NAV ===================== */
 
@@ -62,11 +63,20 @@ function TopNav() {
           <span className="font-display text-xl tracking-tight">RecallX</span>
         </Link>
         <nav className="hidden md:flex items-center gap-8 text-sm text-white/60">
-          <a href="#features" className="hover:text-white transition">Features</a>
-          <a href="#recommender" className="hover:text-white transition">Recommender</a>
-          <a href="#how" className="hover:text-white transition">How it works</a>
+          <a href="#features" className="hover:text-white transition">
+            Features
+          </a>
+          <a href="#recommender" className="hover:text-white transition">
+            Recommender
+          </a>
+          <a href="#how" className="hover:text-white transition">
+            How it works
+          </a>
         </nav>
-        <Link to="/app" className="group inline-flex items-center gap-2 rounded-full bg-white text-black px-4 py-2 text-sm font-medium hover:bg-white/90 transition">
+        <Link
+          to="/app"
+          className="group inline-flex items-center gap-2 rounded-full bg-white text-black px-4 py-2 text-sm font-medium hover:bg-white/90 transition"
+        >
           Launch app <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition" />
         </Link>
       </div>
@@ -89,7 +99,11 @@ function Hero() {
       { y: 0, opacity: 1, rotateX: 0, duration: 1.2, stagger: 0.04, ease: "expo.out", delay: 0.2 },
     );
     if (subRef.current) {
-      gsap.fromTo(subRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 1.0, ease: "power3.out" });
+      gsap.fromTo(
+        subRef.current,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, delay: 1.0, ease: "power3.out" },
+      );
     }
   }, []);
 
@@ -119,7 +133,10 @@ function Hero() {
       <div className="absolute bottom-1/4 -right-32 h-96 w-96 rounded-full bg-cyan-500/20 blur-[120px] animate-glow-pulse" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-fuchsia-600/15 blur-[150px]" />
 
-      <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 max-w-6xl mx-auto px-6 text-center">
+      <motion.div
+        style={{ y: heroY, opacity: heroOpacity }}
+        className="relative z-10 max-w-6xl mx-auto px-6 text-center"
+      >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -146,7 +163,10 @@ function Hero() {
           ))}
         </h1>
 
-        <p ref={subRef} className="mt-8 max-w-2xl mx-auto text-lg md:text-xl text-white/60 leading-relaxed">
+        <p
+          ref={subRef}
+          className="mt-8 max-w-2xl mx-auto text-lg md:text-xl text-white/60 leading-relaxed"
+        >
           The <span className="font-serif italic text-white">memory engine</span> for marketers.
           Remembers every post you ship. Learns what works.{" "}
           <AuroraText className="font-medium">Tells you exactly what to publish next.</AuroraText>
@@ -190,14 +210,25 @@ function Hero() {
 
 function Marquee() {
   const items = [
-    "Hindsight Memory", "Gemini 2.5", "Postgres", "Hybrid Recall", "TanStack Start",
-    "Semantic Search", "Brand Voice", "Engagement Patterns", "Content Gaps", "AI Strategist",
+    "Hindsight Memory",
+    "Gemini 2.5",
+    "Postgres",
+    "Hybrid Recall",
+    "TanStack Start",
+    "Semantic Search",
+    "Brand Voice",
+    "Engagement Patterns",
+    "Content Gaps",
+    "AI Strategist",
   ];
   return (
     <section className="relative py-12 border-y border-white/5 overflow-hidden">
       <div className="flex animate-marquee whitespace-nowrap">
         {[...items, ...items].map((t, i) => (
-          <span key={i} className="mx-8 font-display text-2xl md:text-4xl text-white/20 hover:text-white/60 transition">
+          <span
+            key={i}
+            className="mx-8 font-display text-2xl md:text-4xl text-white/20 hover:text-white/60 transition"
+          >
             ✦ {t}
           </span>
         ))}
@@ -214,20 +245,45 @@ function Features() {
       <div className="mx-auto max-w-7xl">
         <SectionHeader
           eyebrow="Capabilities"
-          title={<>One agent. <AuroraText>Total recall.</AuroraText></>}
+          title={
+            <>
+              One agent. <AuroraText>Total recall.</AuroraText>
+            </>
+          }
           sub="Built on a hybrid memory architecture — Postgres for facts, Hindsight for meaning. Together they make your AI actually remember."
         />
 
         <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[200px]">
-          <BentoCard className="md:col-span-2 md:row-span-2" icon={<Database />} title="Hindsight Memory" desc="Every post you ship lands in a semantic memory bank. Recall is meaning-aware — not keyword matching.">
+          <BentoCard
+            className="md:col-span-2 md:row-span-2"
+            icon={<Database />}
+            title="Hindsight Memory"
+            desc="Every post you ship lands in a semantic memory bank. Recall is meaning-aware — not keyword matching."
+          >
             <div className="absolute bottom-0 right-0 w-2/3 h-2/3 pointer-events-none">
               <SparklesCore particleColor="#67e8f9" particleDensity={50} />
             </div>
           </BentoCard>
-          <BentoCard icon={<TrendingUp />} title="Performance Analysis" desc="Find what actually moved the needle — by topic, platform, format." />
-          <BentoCard icon={<Sparkles />} title="Smart Recommendations" desc="Next 3-5 posts, ranked by predicted engagement." />
-          <BentoCard icon={<Target />} title="Content Gap Finder" desc="Surface untapped angles your competitors already own." />
-          <BentoCard icon={<MessageSquare />} title="Memory-Powered Chat" desc="Ask anything. Get answers cited to your real data." />
+          <BentoCard
+            icon={<TrendingUp />}
+            title="Performance Analysis"
+            desc="Find what actually moved the needle — by topic, platform, format."
+          />
+          <BentoCard
+            icon={<Sparkles />}
+            title="Smart Recommendations"
+            desc="Next 3-5 posts, ranked by predicted engagement."
+          />
+          <BentoCard
+            icon={<Target />}
+            title="Content Gap Finder"
+            desc="Surface untapped angles your competitors already own."
+          />
+          <BentoCard
+            icon={<MessageSquare />}
+            title="Memory-Powered Chat"
+            desc="Ask anything. Get answers cited to your real data."
+          />
         </div>
       </div>
     </section>
@@ -235,8 +291,18 @@ function Features() {
 }
 
 function BentoCard({
-  icon, title, desc, className, children,
-}: { icon: React.ReactNode; title: string; desc: string; className?: string; children?: React.ReactNode }) {
+  icon,
+  title,
+  desc,
+  className,
+  children,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  desc: string;
+  className?: string;
+  children?: React.ReactNode;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -247,7 +313,9 @@ function BentoCard({
       className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 hover:border-white/20 transition ${className ?? ""}`}
     >
       <div className="relative z-10 flex flex-col h-full">
-        <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 border border-white/10 text-violet-300 [&_svg]:size-5">{icon}</div>
+        <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 border border-white/10 text-violet-300 [&_svg]:size-5">
+          {icon}
+        </div>
         <h3 className="mt-4 font-display text-xl text-white">{title}</h3>
         <p className="mt-2 text-sm text-white/50 leading-relaxed">{desc}</p>
       </div>
@@ -257,25 +325,36 @@ function BentoCard({
   );
 }
 
-
-
-
-
-
 /* ===================== HOW IT WORKS ===================== */
 
 function HowItWorks() {
   const steps = [
-    { n: "01", title: "Ingest", desc: "Add posts via form, CSV, or seed demo. Each row writes to Postgres AND embeds into Hindsight." },
-    { n: "02", title: "Recall", desc: "Ask anything. Hindsight finds semantically similar memories. Postgres provides exact aggregates." },
-    { n: "03", title: "Reason", desc: "Gemini 2.5 synthesizes both — structured output, citations, real numbers, real ideas." },
+    {
+      n: "01",
+      title: "Ingest",
+      desc: "Add posts via form, CSV, or seed demo. Each row writes to Postgres AND embeds into Hindsight.",
+    },
+    {
+      n: "02",
+      title: "Recall",
+      desc: "Ask anything. Hindsight finds semantically similar memories. Postgres provides exact aggregates.",
+    },
+    {
+      n: "03",
+      title: "Reason",
+      desc: "Gemini 2.5 synthesizes both — structured output, citations, real numbers, real ideas.",
+    },
   ];
   return (
     <section id="how" className="relative py-32 px-6 border-t border-white/5">
       <div className="mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="Architecture"
-          title={<>Three steps. <AuroraText>One brain.</AuroraText></>}
+          title={
+            <>
+              Three steps. <AuroraText>One brain.</AuroraText>
+            </>
+          }
           sub="Hybrid memory means the agent never forgets — and never hallucinates."
         />
         <div className="mt-20 grid md:grid-cols-3 gap-6">
@@ -320,7 +399,8 @@ function CTA() {
             to="/app"
             className="group inline-flex items-center gap-2 rounded-full bg-white text-black px-8 py-4 text-sm font-medium hover:bg-white/90 transition"
           >
-            Open dashboard <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition" />
+            Open dashboard{" "}
+            <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition" />
           </Link>
           <Link
             to="/chat"
@@ -413,10 +493,17 @@ function Footer() {
   );
 }
 
-
 /* ===================== SHARED ===================== */
 
-function SectionHeader({ eyebrow, title, sub }: { eyebrow: string; title: React.ReactNode; sub: string }) {
+function SectionHeader({
+  eyebrow,
+  title,
+  sub,
+}: {
+  eyebrow: string;
+  title: React.ReactNode;
+  sub: string;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -425,8 +512,12 @@ function SectionHeader({ eyebrow, title, sub }: { eyebrow: string; title: React.
       transition={{ duration: 0.6 }}
       className="text-center max-w-3xl mx-auto"
     >
-      <div className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-mono">{eyebrow}</div>
-      <h2 className="mt-4 font-display text-5xl md:text-6xl tracking-tight text-balance text-white">{title}</h2>
+      <div className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-mono">
+        {eyebrow}
+      </div>
+      <h2 className="mt-4 font-display text-5xl md:text-6xl tracking-tight text-balance text-white">
+        {title}
+      </h2>
       <p className="mt-4 text-white/50">{sub}</p>
     </motion.div>
   );
